@@ -41,6 +41,7 @@
     </node>
 
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(find diy_pkg)/world/obstacle.world"/>
         <arg name="paused" value="false"/>
         <arg name="use_sim_time" value="$(arg use_sim_time)" />
     </include>
