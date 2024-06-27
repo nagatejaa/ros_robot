@@ -47,7 +47,11 @@
                 </clip>
             </camera>
             <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
-                <frame_name>camera_link_optical</frame_name>
+                <alwaysOn>true</alwaysOn>
+                <updateRate>30</updateRate>
+                <cameraName>my_camera</cameraName>
+                <frameName>camera_link_optical</frameName>
+                <topicName>image_raw</topicName>
             </plugin>
         </sensor>
     </gazebo>

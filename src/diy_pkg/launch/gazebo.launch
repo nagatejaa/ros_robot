@@ -1,4 +1,4 @@
-<launch>
+<!-- <launch>
    
     <arg name="use_sim_time" default="false" />
 
@@ -27,4 +27,39 @@
   
     <node pkg="tf2_ros" type="static_transform_publisher" name="base_link_publisher" 
           args="0 0 0 0 0 0 odom base_link" />
+</launch> -->
+
+
+<launch>
+    <arg name="use_sim_time" default="false" />
+    <param name="use_sim_time" value="$(arg use_sim_time)" />
+    <param name="robot_description" command="$(find xacro)/xacro $(find diy_pkg)/urdf/bot.urdf.xacro" />
+    
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen">
+        <param name="publish_frequency" type="double" value="10.0" />
+        <param name="use_sim_time" value="$(arg use_sim_time)" />
+    </node>
+
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="paused" value="false"/>
+        <arg name="use_sim_time" value="$(arg use_sim_time)" />
+    </include>
+
+    <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" output="screen"
+          args="-urdf -param robot_description -model my_bot" />
+
+    <node pkg="tf2_ros" type="static_transform_publisher" name="base_link_publisher" 
+          args="0 0 0 0 0 0 odom base_link" />
+
+    <!-- Static Transform Publisher for Camera -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="chassis_to_camera_link" 
+          args="0.305 0 0.08 0 0 0 chassis camera_link" />
+    <node pkg="tf2_ros" type="static_transform_publisher" name="camera_link_to_camera_optical" 
+          args="0 0 0 -1.5708 0 -1.5708 camera_link camera_link_optical" />
+
+    <!-- Static Transform Publisher for LIDAR -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="chassis_to_lidar_link" 
+          args="0.3 0 0.2 0 0 0 chassis lidar_link" />
+
+    <node pkg="rviz" type="rviz" name="rviz_displY" args="-d $(find diy_pkg)/rviz/changed.rviz"/>
 </launch>
