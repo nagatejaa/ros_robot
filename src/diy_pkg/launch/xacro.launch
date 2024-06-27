@@ -1,6 +1,6 @@
 <launch>
     <!-- Declare the 'use_sim_time' argument -->
-    <arg name="use_sim_time" default="true"/>
+    <arg name="use_sim_time" default="false"/>
 
     <!-- Define the path to the xacro file -->
     <param name="robot_description" command="$(find xacro)/xacro $(find diy_pkg)/urdf/bot.urdf.xacro" />
