@@ -1,0 +1,30 @@
+<launch>
+    <!-- Declare the 'use_sim_time' argument -->
+    <arg name="use_sim_time" default="true" />
+
+    <!-- Set use_sim_time parameter -->
+    <param name="use_sim_time" value="$(arg use_sim_time)" />
+
+    <!-- Include the robot_description -->
+    <param name="robot_description" command="$(find xacro)/xacro $(find diy_pkg)/urdf/bot.urdf.xacro" />
+
+    <!-- Include the robot_state_publisher launch file -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen">
+        <param name="publish_frequency" type="double" value="10.0" />
+        <param name="use_sim_time" value="$(arg use_sim_time)" />
+    </node>
+
+    <!-- Include the Gazebo launch file -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="paused" value="false"/>
+        <arg name="use_sim_time" value="$(arg use_sim_time)" />
+    </include>
+
+    <!-- Run the spawn_model script -->
+    <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" output="screen"
+          args="-urdf -param robot_description -model my_bot" />
+
+    <!-- Static transform publisher for base_link to odom -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="base_link_publisher" 
+          args="0 0 0 0 0 0 odom base_link" />
+</launch>

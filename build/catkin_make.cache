@@ -1,0 +1,2 @@
+diy_pkg
+-DCATKIN_DEVEL_PREFIX=/home/nagateja/diy_ws/devel -DCMAKE_INSTALL_PREFIX=/home/nagateja/diy_ws/install -G Unix Makefiles
